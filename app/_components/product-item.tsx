@@ -6,7 +6,13 @@ import { calculateProductTotalPrice, formatCurrency } from "../_helpers/price";
 
 interface ProductItemProps {
   product: Prisma.ProductGetPayload<{
-    include: { restaurant: true };
+    include: {
+      restaurant: {
+        select: {
+          name: true;
+        };
+      };
+    };
   }>;
 }
 

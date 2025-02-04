@@ -5,8 +5,10 @@ import CategoryList from "./_components/category-list";
 import RecomendedTitle from "./_components/recomended-title";
 import ProductList from "./_components/product-list";
 import RestaurantList from "./_components/restaurant-list";
+import { getDiscountProducts } from "./_data-access/product/get-discount-products";
 
 export default async function Home() {
+  const products = await getDiscountProducts();
   return (
     <div>
       <Header />
@@ -37,7 +39,7 @@ export default async function Home() {
       {/* LISTA DE PRODUTOS */}
       <div className="space-y-1 px-5 py-6">
         <RecomendedTitle>Pedidos recomendados</RecomendedTitle>
-        <ProductList />
+        <ProductList products={products} />
       </div>
 
       {/* BANNER */}
