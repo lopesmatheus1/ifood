@@ -1,17 +1,8 @@
-import { db } from "../_lib/prisma";
+import { getDiscountProducts } from "../_data-access/product/get-discount-products";
 import ProductItem from "./product-item";
 
 const ProductList = async () => {
-  const products = await db.product.findMany({
-    include: {
-      restaurant: true,
-    },
-    where: {
-      priceDiscount: {
-        gt: 0,
-      },
-    },
-  });
+  const products = await getDiscountProducts();
 
   return (
     <div className="flex gap-4 overflow-x-auto py-2">
