@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Badge } from "./ui/badge";
 import { StarIcon } from "lucide-react";
 import FavoriteButton from "./favorite-button";
+import { formatCurrency } from "../_helpers/price";
 
 interface RestaurantItemProps {
   restaurants: Restaurant;
@@ -23,7 +24,9 @@ const RestaurantItem = ({ restaurants }: RestaurantItemProps) => {
           <p className="ml-1 font-bold text-accent-foreground">5.0</p>
         </Badge>
 
-        <FavoriteButton />
+        <div className="absolute right-2 top-2 h-8 w-8">
+          <FavoriteButton />
+        </div>
       </div>
 
       <div className="mt-3 h-full w-full p-1">
@@ -36,7 +39,11 @@ const RestaurantItem = ({ restaurants }: RestaurantItemProps) => {
               width={16}
               height={16}
             />
-            <p>Entrega Gráts</p>
+            <p>
+              {Number(restaurants.deliveryFee) === 0
+                ? "Entrega Grátis"
+                : formatCurrency(Number(restaurants.deliveryFee))}
+            </p>
           </div>
           <div className="flex items-center gap-1">
             <Image

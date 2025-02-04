@@ -13,11 +13,11 @@ const FavoriteButton = () => {
   return (
     <Button
       onClick={handleFavoriteClick}
-      className="absolute right-2 top-2 h-8 w-8 rounded-full bg-white hover:bg-white"
+      className="hover:bg-bg-secondary/50 h-full w-full rounded-full bg-secondary/50"
     >
       <HeartIcon
         className={`${isFavorite ? "fill-current text-primary" : "fill-none text-primary"} `}
-        size={18}
+        size={20}
       />
     </Button>
   );
