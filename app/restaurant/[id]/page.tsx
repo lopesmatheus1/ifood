@@ -1,7 +1,7 @@
-import { db } from "@/app/_lib/prisma";
 import { notFound } from "next/navigation";
 import RestaurantImage from "./_components/restaurant-image";
 import RestaurantDetails from "./_components/restaurant-details";
+import { getUniqueRestaurant } from "@/app/_data-access/restaurants/get-unique-restaurant";
 
 interface RestaurantProps {
   params: {
@@ -10,24 +10,8 @@ interface RestaurantProps {
 }
 
 const Restaurant = async ({ params: { id } }: RestaurantProps) => {
-  const restaurant = await db.restaurant.findUnique({
-    where: { id },
-    include: {
-      categories: { orderBy: { name: "asc" } },
-      products: {
-        where: {
-          restaurantId: id,
-        },
-        include: {
-          restaurant: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  const restaurant = getUniqueRestaurant(id);
+
   if (!restaurant) return notFound;
 
   return (
