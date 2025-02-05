@@ -14,6 +14,11 @@ export const getDiscountProducts = async () => {
       priceDiscount: {
         gt: 0,
       },
+      name: {
+        not: {
+          contains: "Suco",
+        },
+      },
     },
     take: 30,
   });
