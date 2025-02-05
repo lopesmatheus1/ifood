@@ -39,7 +39,7 @@ export default async function Home() {
       {/* LISTA DE PRODUTOS */}
       <div className="space-y-1 px-5 py-6">
         <RecomendedTitle>Pedidos recomendados</RecomendedTitle>
-        <ProductList products={products} />
+        <ProductList products={JSON.parse(JSON.stringify(products))} />
       </div>
 
       {/* BANNER */}
