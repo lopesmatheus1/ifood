@@ -1,20 +1,15 @@
 "use client";
+import DeliveryInfo from "@/app/_components/delivery-info";
 import ProductList from "@/app/_components/product-list";
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
-import { Card } from "@/app/_components/ui/card";
+
 import {
   calculateProductTotalPrice,
   formatCurrency,
 } from "@/app/_helpers/price";
 import { Prisma } from "@prisma/client";
-import {
-  ArrowDownIcon,
-  BikeIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ClockIcon,
-} from "lucide-react";
+import { ArrowDownIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -95,33 +90,7 @@ const ProductDetails = ({
 
       {/* ENTREGA */}
       <div className="px-5">
-        <Card className="my-6 border-none py-2">
-          <div className="flex justify-around">
-            <div>
-              {/* PREÇO */}
-              <div className="flex items-center gap-1">
-                <span className="text-muted-foreground">Entrega</span>
-                <BikeIcon className="text-muted-foreground" size={15} />
-              </div>
-              <p className="text-center font-semibold text-accent-foreground">
-                {Number(product.restaurant.deliveryFee) === 0
-                  ? "Entrega Grátis"
-                  : formatCurrency(Number(product.restaurant.deliveryFee))}
-              </p>
-            </div>
-
-            {/* TEMPO */}
-            <div>
-              <div className="flex items-center gap-1">
-                <span className="text-muted-foreground">Entrega</span>
-                <ClockIcon className="text-muted-foreground" size={15} />
-              </div>
-              <p className="text-center font-semibold text-accent-foreground">
-                {product.restaurant.deliveryTime} min
-              </p>
-            </div>
-          </div>
-        </Card>
+        <DeliveryInfo restaurant={product.restaurant} />
       </div>
 
       {/* DESCRIÇAO */}
