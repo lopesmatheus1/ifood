@@ -104,7 +104,7 @@ const ProductDetails = ({
                 <BikeIcon className="text-muted-foreground" size={15} />
               </div>
               <p className="text-center font-semibold text-accent-foreground">
-                {Number(product.price) === 0
+                {Number(product.restaurant.deliveryFee) === 0
                   ? "Entrega Grátis"
                   : formatCurrency(Number(product.restaurant.deliveryFee))}
               </p>
