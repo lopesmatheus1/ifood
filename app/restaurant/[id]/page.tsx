@@ -10,7 +10,7 @@ interface RestaurantProps {
 }
 
 const Restaurant = async ({ params: { id } }: RestaurantProps) => {
-  const restaurant = getUniqueRestaurant(id);
+  const restaurant = await getUniqueRestaurant(id);
 
   if (!restaurant) return notFound;
 
