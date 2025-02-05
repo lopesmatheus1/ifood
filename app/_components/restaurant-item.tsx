@@ -5,18 +5,20 @@ import { StarIcon } from "lucide-react";
 import FavoriteButton from "./favorite-button";
 import { formatCurrency } from "../_helpers/price";
 import Link from "next/link";
+import { cn } from "../_lib/utils";
 interface RestaurantItemProps {
   restaurants: Restaurant;
+  className?: string;
 }
 
-const RestaurantItem = ({ restaurants }: RestaurantItemProps) => {
+const RestaurantItem = ({ restaurants, className }: RestaurantItemProps) => {
   return (
     <Link
-      className="min-h-[240px] w-full max-w-[266px]"
+      className={(cn("min-h-[240px] w-full max-w-[266px]"), className)}
       href={`/restaurant/${restaurants.id}`}
     >
       <div className="flex h-full w-full flex-col rounded-xl shadow-md">
-        <div className="relative min-h-[187px] w-[266px]">
+        <div className="relative min-h-[187px] w-full min-w-[266px]">
           <Image
             alt={restaurants.name}
             src={restaurants.imageUrl}

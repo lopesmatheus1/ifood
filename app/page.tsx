@@ -38,7 +38,9 @@ export default async function Home() {
 
       {/* LISTA DE PRODUTOS */}
       <div className="space-y-1 px-5 py-6">
-        <RecomendedTitle>Pedidos recomendados</RecomendedTitle>
+        <RecomendedTitle href="/products/recommended">
+          Pedidos recomendados
+        </RecomendedTitle>
         <ProductList products={JSON.parse(JSON.stringify(products))} />
       </div>
 
@@ -56,7 +58,9 @@ export default async function Home() {
       </div>
 
       <div className="px-5 py-6">
-        <RecomendedTitle>Restaurantes Recomendados</RecomendedTitle>
+        <RecomendedTitle href="/restaurant/recommended">
+          Restaurantes Recomendados
+        </RecomendedTitle>
         <RestaurantList />
       </div>
     </div>

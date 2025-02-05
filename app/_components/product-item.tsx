@@ -20,9 +20,12 @@ interface ProductItemProps {
 
 const ProductItem = ({ product }: ProductItemProps) => {
   return (
-    <Link href={`/products/${product.id}`}>
-      <div className="flex h-[220px] w-full max-w-[150px] flex-col rounded-xl shadow-md">
-        <div className="relative min-h-[150px] w-[150px]">
+    <Link
+      className="h-[220px] w-full min-w-[130px] max-w-[180px]"
+      href={`/products/${product.id}`}
+    >
+      <div className="flex h-full w-full flex-col rounded-xl shadow-md">
+        <div className="relative max-h-[150px] min-h-[150px] min-w-[130px] max-w-[180px]">
           <Image
             alt={product.name}
             src={product.imageUrl}
