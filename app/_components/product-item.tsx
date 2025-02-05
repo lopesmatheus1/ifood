@@ -29,10 +29,14 @@ const ProductItem = ({ product }: ProductItemProps) => {
             fill
             className="rounded-xl object-cover"
           />
-          <Badge className="absolute left-2 top-2">
-            <ArrowDownIcon size={16} />
-            <span>{product.priceDiscount}%</span>
-          </Badge>
+          {product.priceDiscount === 0 ? (
+            ""
+          ) : (
+            <Badge className="absolute left-2 top-2">
+              <ArrowDownIcon size={16} />
+              <span>{product.priceDiscount}%</span>
+            </Badge>
+          )}
         </div>
 
         <div className="h-full w-full">
@@ -41,9 +45,13 @@ const ProductItem = ({ product }: ProductItemProps) => {
             <h2 className="font-semibold">
               {formatCurrency(calculateProductTotalPrice(product))}
             </h2>
-            <p className="text-sm text-muted-foreground line-through">
-              {formatCurrency(Number(product.price))}
-            </p>
+            {product.priceDiscount === 0 ? (
+              ""
+            ) : (
+              <p className="text-sm text-muted-foreground line-through">
+                {formatCurrency(Number(product.price))}
+              </p>
+            )}
           </div>
           <p className="truncate text-sm text-muted-foreground">
             {product.restaurant.name}
