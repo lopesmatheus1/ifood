@@ -34,8 +34,7 @@ const ProductDetails = ({
   complementaryProduct,
 }: ProductDetailsProp) => {
   const [quantity, setQuantity] = useState(1);
-  const { addProductToCart } = useContext(CartContext);
-  const [sheetIsOpen, setSheetIsOpen] = useState(false);
+  const { addProductToCart, cartIsOpen, toggleCart } = useContext(CartContext);
 
   const handleDecreseClick = () => {
     if (quantity <= 1) {
@@ -49,7 +48,7 @@ const ProductDetails = ({
 
   const handleAddToCartClick = () => {
     addProductToCart(product, quantity);
-    setSheetIsOpen(true);
+    toggleCart();
   };
 
   return (
@@ -130,7 +129,7 @@ const ProductDetails = ({
           </Button>
         </div>
       </div>
-      <Sheet open={sheetIsOpen} onOpenChange={setSheetIsOpen}>
+      <Sheet open={cartIsOpen} onOpenChange={toggleCart}>
         <SheetContent className="w-[90vw]">
           <SheetHeader>
             <SheetTitle className="mb-4 text-left">Sacola</SheetTitle>

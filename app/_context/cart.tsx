@@ -33,6 +33,9 @@ interface ICartContext {
   increaseQuantity: (productId: string) => void;
   decreaseQuantity: (productId: string) => void;
   deleteProductFromCart: (productId: string) => void;
+  cartIsOpen: boolean;
+  toggleCart: () => void;
+  totalQuantity: number;
 }
 
 export const CartContext = createContext<ICartContext>({
@@ -44,10 +47,22 @@ export const CartContext = createContext<ICartContext>({
   increaseQuantity: () => {},
   decreaseQuantity: () => {},
   deleteProductFromCart: () => {},
+  cartIsOpen: false,
+  toggleCart: () => {},
+  totalQuantity: 0,
 });
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [products, setProducts] = useState<CartProducts[]>([]);
+  const [cartIsOpen, setCartIsOpen] = useState(false);
+
+  const toggleCart = () => setCartIsOpen(!cartIsOpen);
+
+  const totalQuantity = useMemo(() => {
+    return products.reduce((acc, product) => {
+      return acc + product.quantity;
+    }, 0);
+  }, [products]);
 
   const totalPrice = useMemo(() => {
     return products.reduce((acc, product) => {
@@ -149,12 +164,15 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         products,
         addProductToCart,
+        toggleCart,
         increaseQuantity,
         decreaseQuantity,
         deleteProductFromCart,
         subTotalPrice,
         totalDiscount,
         totalPrice,
+        cartIsOpen,
+        totalQuantity,
       }}
     >
       {children}

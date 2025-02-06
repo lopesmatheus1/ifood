@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 
 import "./globals.css";
 import { CartProvider } from "./_context/cart";
+import OpenCart from "./_components/open-cart";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,7 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.className}>
       <body className={`antialiased`}>
-        <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          {children}
+          <OpenCart />
+        </CartProvider>
       </body>
     </html>
   );

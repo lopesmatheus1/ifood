@@ -12,67 +12,69 @@ const Cart = () => {
 
   return (
     <div className="flex h-[95%] flex-col justify-between">
-      <div className="space-y-4">
-        {products.map((product) => (
-          // eslint-disable-next-line react/jsx-key
-          <CartItem cartProduct={product} key={product.id} />
-        ))}
-      </div>
+      {products.length > 0 ? (
+        <>
+          <div className="space-y-4">
+            {products.map((product) => (
+              // eslint-disable-next-line react/jsx-key
+              <CartItem cartProduct={product} key={product.id} />
+            ))}
+          </div>
 
-      <div className="mt-6">
-        <Card className="border-muted-foreground/40">
-          <CardContent className="flex flex-col justify-between space-y-1.5 p-5">
-            <div className="flex w-full items-center justify-between">
-              <span className="text-sm text-muted-foreground">Subtotal</span>
-              <p className="text-sm font-medium">
-                {formatCurrency(subTotalPrice)}
-              </p>
-            </div>
+          <div className="mt-6">
+            <Card className="border-muted-foreground/40">
+              <CardContent className="flex flex-col justify-between space-y-1.5 p-5">
+                <div className="flex w-full items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    Subtotal
+                  </span>
+                  <p className="text-sm font-medium">
+                    {formatCurrency(subTotalPrice)}
+                  </p>
+                </div>
 
-            <Separator />
+                <Separator />
 
-            <div className="flex w-full items-center justify-between">
-              <span className="text-sm text-muted-foreground">Descontos</span>
-              <p className="text-sm font-medium">
-                {formatCurrency(totalDiscount)}
-              </p>
-            </div>
+                <div className="flex w-full items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    Descontos
+                  </span>
+                  <p className="text-sm font-medium">
+                    {formatCurrency(totalDiscount)}
+                  </p>
+                </div>
 
-            <Separator />
+                <Separator />
 
-            <div className="flex w-full items-center justify-between">
-              <span className="text-sm text-muted-foreground">Entrega</span>
-              {products.length === 0 ? (
-                <p className="text-sm font-medium">R$ 0,00</p>
-              ) : (
-                <p>
-                  {Number(products[0].restaurant.deliveryFee) === 0 ? (
-                    <span className="uppercase text-primary">Grátis</span>
-                  ) : (
-                    formatCurrency(Number(products[0].restaurant.deliveryFee))
-                  )}
-                </p>
-              )}
-            </div>
+                <div className="flex w-full items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Entrega</span>
+                  <p>
+                    {Number(products[0].restaurant.deliveryFee) === 0 ? (
+                      <span className="uppercase text-primary">Grátis</span>
+                    ) : (
+                      formatCurrency(Number(products[0].restaurant.deliveryFee))
+                    )}
+                  </p>
+                </div>
 
-            <Separator />
+                <Separator />
 
-            <div className="flex w-full items-center justify-between">
-              <p className="font-semibold">Total</p>
-              {products.length === 0 ? (
-                <p className="font-semibold">R$ 0,00</p>
-              ) : (
-                <p className="font-semibold">
-                  {formatCurrency(
-                    totalPrice + Number(products[0].restaurant.deliveryFee),
-                  )}
-                </p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-        <Button className="mt-3 w-full">Finalizar pedido</Button>
-      </div>
+                <div className="flex w-full items-center justify-between">
+                  <p className="font-semibold">Total</p>
+                  <p className="font-semibold">
+                    {formatCurrency(
+                      totalPrice + Number(products[0].restaurant.deliveryFee),
+                    )}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+            <Button className="mt-3 w-full">Finalizar pedido</Button>
+          </div>
+        </>
+      ) : (
+        <p className="font-medium text-muted-foreground">Sacola vazia</p>
+      )}
     </div>
   );
 };
