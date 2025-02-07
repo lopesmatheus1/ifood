@@ -2,7 +2,12 @@ import { AlignJustify } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
-const Header = () => {
+import { Sheet, SheetTrigger } from "./ui/sheet";
+import SidebarSheetContent from "./sidebar-sheet-content";
+import { getCategory } from "../_data-access/category/get-category";
+
+const Header = async () => {
+  const categories = await getCategory();
   return (
     <header className="flex w-full items-center justify-between px-5 pb-1 pt-7">
       <Link href={"/"}>
@@ -14,9 +19,14 @@ const Header = () => {
         />
       </Link>
 
-      <Button className="h-10 w-10" variant={"ghost"}>
-        <AlignJustify size={20} />
-      </Button>
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button className="h-10 w-10" variant={"ghost"}>
+            <AlignJustify size={20} />
+          </Button>
+        </SheetTrigger>
+        <SidebarSheetContent categories={categories} />
+      </Sheet>
     </header>
   );
 };
