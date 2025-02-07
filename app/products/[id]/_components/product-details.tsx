@@ -2,6 +2,16 @@
 import Cart from "@/app/_components/cart";
 import DeliveryInfo from "@/app/_components/delivery-info";
 import ProductList from "@/app/_components/product-list";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/app/_components/ui/alert-dialog";
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
 import {
@@ -34,7 +44,9 @@ const ProductDetails = ({
   complementaryProduct,
 }: ProductDetailsProp) => {
   const [quantity, setQuantity] = useState(1);
-  const { addProductToCart, cartIsOpen, toggleCart } = useContext(CartContext);
+  const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false);
+  const { addProductToCart, cartIsOpen, toggleCart, products } =
+    useContext(CartContext);
 
   const handleDecreseClick = () => {
     if (quantity <= 1) {
@@ -47,6 +59,12 @@ const ProductDetails = ({
   };
 
   const handleAddToCartClick = () => {
+    const productIsFromDiferentRestaurant =
+      products.length > 0 && products[0].restaurantId !== product.restaurantId;
+    if (productIsFromDiferentRestaurant) {
+      return setAlertDialogIsOpen(true);
+    }
+
     addProductToCart(product, quantity);
     toggleCart();
   };
@@ -137,6 +155,27 @@ const ProductDetails = ({
           <Cart />
         </SheetContent>
       </Sheet>
+
+      <AlertDialog open={alertDialogIsOpen} onOpenChange={setAlertDialogIsOpen}>
+        <AlertDialogContent className="w-[90%]">
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Você só pode adicionar itens de uma loja por vez
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Deseja esvaziar sacola e adicionar este item?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => addProductToCart(product, quantity)}
+            >
+              Esvaziar sacola e adicionar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };
