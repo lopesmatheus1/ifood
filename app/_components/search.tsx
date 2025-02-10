@@ -22,7 +22,7 @@ const Search = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    router.push(`/restaurant?search=${values}`);
+    router.push(`/restaurant?search=${values.search}`);
   }
 
   return (
