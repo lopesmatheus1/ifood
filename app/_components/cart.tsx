@@ -1,3 +1,4 @@
+"use client";
 import { useContext, useState } from "react";
 import { CartContext } from "../_context/cart";
 import CartItem from "./cart-item";
@@ -18,13 +19,22 @@ import {
   AlertDialogTitle,
 } from "./ui/alert-dialog";
 import { Loader2Icon } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const Cart = () => {
-  const { products, subTotalPrice, totalPrice, totalDiscount, clearCart } =
-    useContext(CartContext);
+  const {
+    products,
+    subTotalPrice,
+    totalPrice,
+    totalDiscount,
+    clearCart,
+    toggleCart,
+  } = useContext(CartContext);
   const { data } = useSession();
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [isSubmitingLoading, setIsSubmitLoading] = useState(false);
+  const router = useRouter();
 
   const handleCreateOrder = async () => {
     const restaurant = products[0].restaurant;
@@ -57,6 +67,16 @@ const Cart = () => {
         },
       });
       clearCart();
+
+      toast("Pedido realizado com sucesso", {
+        description: "Você pode acompanhá-lo na tela dos seus pedidos",
+        action: {
+          label: "Meus Pedidos",
+          onClick: () => router.push("/my-orders"),
+        },
+      });
+
+      toggleCart();
       setDialogIsOpen(false);
     } catch (error) {
       console.log(error);

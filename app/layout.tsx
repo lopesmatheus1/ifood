@@ -5,6 +5,7 @@ import "./globals.css";
 import { CartProvider } from "./_context/cart";
 import OpenCart from "./_components/open-cart";
 import AuthProvider from "./provider/auth-provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -29,6 +30,7 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             {children}
+            <Toaster />
             <OpenCart />
           </CartProvider>
         </AuthProvider>
