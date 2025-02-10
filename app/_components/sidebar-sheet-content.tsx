@@ -80,7 +80,7 @@ const SidebarSheetContent = ({ categories }: SidebarSheetContent) => {
 
           {data?.user && (
             <>
-              <SidebarButton link="#">
+              <SidebarButton link="my-orders">
                 <ScrollText size={16} />
                 Meus Pedidos
               </SidebarButton>

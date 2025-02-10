@@ -8,7 +8,7 @@ export interface CartProducts
   extends Prisma.ProductGetPayload<{
     include: {
       restaurant: {
-        select: { deliveryFee: true };
+        select: { deliveryFee: true; deliveryTime: true; id: true };
       };
     };
   }> {
@@ -20,11 +20,13 @@ interface ICartContext {
   subTotalPrice: number;
   totalPrice: number;
   totalDiscount: number;
+  cartIsOpen: boolean;
+  totalQuantity: number;
   addProductToCart: (
     products: Prisma.ProductGetPayload<{
       include: {
         restaurant: {
-          select: { deliveryFee: true };
+          select: { deliveryFee: true; deliveryTime: true; id: true };
         };
       };
     }>,
@@ -33,9 +35,8 @@ interface ICartContext {
   increaseQuantity: (productId: string) => void;
   decreaseQuantity: (productId: string) => void;
   deleteProductFromCart: (productId: string) => void;
-  cartIsOpen: boolean;
+  clearCart: () => void;
   toggleCart: () => void;
-  totalQuantity: number;
 }
 
 export const CartContext = createContext<ICartContext>({
@@ -43,13 +44,14 @@ export const CartContext = createContext<ICartContext>({
   subTotalPrice: 0,
   totalPrice: 0,
   totalDiscount: 0,
+  totalQuantity: 0,
+  cartIsOpen: false,
+  toggleCart: () => {},
   addProductToCart: () => {},
   increaseQuantity: () => {},
   decreaseQuantity: () => {},
   deleteProductFromCart: () => {},
-  cartIsOpen: false,
-  toggleCart: () => {},
-  totalQuantity: 0,
+  clearCart: () => {},
 });
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
@@ -65,9 +67,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   }, [products]);
 
   const totalPrice = useMemo(() => {
-    return products.reduce((acc, product) => {
+    const totalprice = products.reduce((acc, product) => {
       return acc + calculateProductTotalPrice(product) * product.quantity;
     }, 0);
+    return totalprice + Number(products?.[0]?.restaurant.deliveryFee);
   }, [products]);
 
   const subTotalPrice = useMemo(() => {
@@ -76,7 +79,12 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }, 0);
   }, [products]);
 
-  const totalDiscount = totalPrice - subTotalPrice;
+  const totalDiscount =
+    totalPrice - subTotalPrice - Number(products?.[0]?.restaurant.deliveryFee);
+
+  const clearCart = () => {
+    setProducts([]);
+  };
 
   const deleteProductFromCart = (productId: string) => {
     return setProducts((prev) =>
@@ -163,6 +171,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     <CartContext.Provider
       value={{
         products,
+        clearCart,
         addProductToCart,
         toggleCart,
         increaseQuantity,

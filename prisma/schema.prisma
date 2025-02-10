@@ -21,6 +21,7 @@ model Restaurant {
   deliveryTime Int
   categories   Category[]
   products     Product[]
+  orders       Order[]
 }
 
 model Category {
@@ -32,20 +33,55 @@ model Category {
 }
 
 model Product {
-  id            String     @id @default(uuid())
+  id            String         @id @default(uuid())
   name          String
   imageUrl      String
   description   String
-  price         Decimal    @db.Decimal(10, 2)
-  priceDiscount Int        @default(0)
+  price         Decimal        @db.Decimal(10, 2)
+  priceDiscount Int            @default(0)
   restaurantId  String
-  restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurant    Restaurant     @relation(fields: [restaurantId], references: [id])
   categoryId    String
-  category      Category   @relation(fields: [categoryId], references: [id])
+  category      Category       @relation(fields: [categoryId], references: [id])
+  
+  OrderProduct  OrderProduct[]
 }
 
+model Order {
+  id             String         @id @default(uuid())
+  userId         String
+  user           User           @relation(fields: [userId], references: [id])
+  
+  restaurant     Restaurant     @relation(fields: [restaurantId], references: [id])
+  restaurantId   String
+  deliveryFee    Decimal        @db.Decimal(10, 2)
+  deliveryTime   Int
+  subTotalPrice  Decimal        @db.Decimal(10, 2)
+  totalPrice     Decimal        @db.Decimal(10, 2)
+  totalDiscounts Decimal        @db.Decimal(10, 2)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  status         OrderStatus
+  orderProduct   OrderProduct[]
+}
 
- 
+model OrderProduct {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+}
+
+enum OrderStatus {
+  CONFIRMED
+  CANCELED
+  PREPARING
+  DELIVERING
+  COMPLETED
+}
+
 model User {
   id            String          @id @default(cuid())
   name          String?
@@ -56,11 +92,11 @@ model User {
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  orders        Order[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
- 
+
 model Account {
   userId            String
   type              String
@@ -73,33 +109,33 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
- 
+
 // Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
@@ -110,8 +146,8 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([userId, credentialID])
 }
